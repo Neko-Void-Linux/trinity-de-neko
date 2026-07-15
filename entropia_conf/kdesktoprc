@@ -1,0 +1,37 @@
+[Desktop Icons]
+Preview=imagethumbnail
+
+[Desktop0]
+BackgroundMode=Flat
+BlendBalance=100
+BlendMode=NoBlending
+ChangeInterval=60
+Color1=113,139,165
+Color2=192,192,192
+CrossFadeBg=false
+CurrentWallpaperName=
+LastChange=0
+MinOptimizationDepth=1
+MultiWallpaperMode=NoMulti
+Pattern[$e]=
+Program=
+ReverseBlending=false
+UseSHM=false
+Wallpaper[$e]=/opt/trinity/share/wallpapers/stripes.jpg
+WallpaperList=
+WallpaperMode=Scaled
+
+[FMSettings]
+NormalTextColor=255,255,255
+UnderlineLinks=false
+
+[Menubar]
+ShowMenubar=false
+
+[Mouse Buttons]
+Middle=WindowListMenu
+
+[Version]
+KDEVersionMajor=14
+KDEVersionMinor=1
+KDEVersionRelease=6
