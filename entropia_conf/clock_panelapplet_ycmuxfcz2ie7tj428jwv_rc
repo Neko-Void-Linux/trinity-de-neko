@@ -1,0 +1,12 @@
+[Date]
+Font=Sans Serif,10,-1,0,50,0,0,0,0,0
+Foreground_Color=145,171,255
+
+[General]
+Initial_TZ=0
+RemoteZones=
+
+[Plain]
+Font=Sans Serif,14,-1,5,75,0,0,0,0,0
+Foreground_Color=159,226,255
+Show_DayOfWeek=true
