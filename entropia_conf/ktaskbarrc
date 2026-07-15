@@ -1,0 +1,5 @@
+[$Version]
+update_info=kickerrc.upd:kde_3_5_taskbarEnums
+
+[Appearance]
+DrawButtons=true
