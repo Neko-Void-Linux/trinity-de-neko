@@ -125,6 +125,6 @@ else
 	echo "   CORRECTO: no se encontraron rutas 'hardcodeadas'."
 fi
 
-echo -n "\n>> listo. tema extraído en: $salida"
+echo -e "\n>> Listo. tema extraído en: $salida"
 echo ">> Contenido:"
 ls -la "$salida" | sed 's/^/   /'
