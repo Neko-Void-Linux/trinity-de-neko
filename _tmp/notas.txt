@@ -1,4 +1,4 @@
-En este archivo, se documentará, sin demasiado detalle, el proceso para extraer las configuraciones de los escritorios TDE de las siguientes distros:
+En este archivo, se documentará, sin demasiado detalle, el proceso para extraer las configuraciones de los escritorios TDE de las siguientes distros y poder armar un segundo script BASH que permita cambiar "al vuelo" el tema del escritorio por otros ya conocidos y predefinidos.
 
 ├── darkness-20260517.iso
 ├── dragora-2.2-x86_64.iso
