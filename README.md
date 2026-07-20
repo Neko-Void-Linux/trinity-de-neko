@@ -1,10 +1,10 @@
-<br><p align="left">
-  <img src="capturas_IGU/Captura de pantalla_2026-07-20_17-25-10.png" width="900">
-</p>Programa creado por Hugo Napoli. Contacto: hugonapoli@mailbox.org - https://t.me/entropiabinaria
-
 # TDE
 
 Trinity Desktop Environment for VOID Linux. /// Trinity Desktop Environment para VOID Linux.
+
+<br><p align="left">
+  <img src="capturas_IGU/Captura de pantalla_2026-07-20_17-25-10.png" width="900">
+</p>Programa creado por Hugo Napoli. Contacto: hugonapoli@mailbox.org - https://t.me/entropiabinaria
 
 # TDE para Void Linux
 
