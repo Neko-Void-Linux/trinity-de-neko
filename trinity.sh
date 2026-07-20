@@ -2,10 +2,13 @@
 
 # Compilador e instalador de Trinity Desktop Environment (TDE) en Void Linux desde las fuentes oficiales (/opt/trinity).
 
-VERSION="0.94.98"
+VERSION="0.97.101"
 
 # Idioma de la interfaz. Se compila solo el subdirectorio de este idioma (poco más de 100 MB) desde el repo tde-i18n (que pesaría más de 3 GB completo).
 idioma="es"
+
+# Teclado preferido.
+layout_teclado="latam"
 
 set -euo pipefail
 
@@ -190,6 +193,7 @@ compilar_cmake() {
     if [[ "$modulo" == "tdelibs" ]];then
 		flags+=(-DCMAKE_SKIP_RPATH=OFF)
 		flags+=(-DWITH_ARTS=OFF)
+		flags+=(-DWITH_LOGINDPOWER=ON)
 	fi
 
 	if [[ "$modulo" == "tdebase" ]];then
@@ -342,6 +346,75 @@ aplicar_configuracion() {
 
 		mkdir -p "$destino"
 		cp -r "$origen"/* "$destino/"
+		
+		# Capa "base": servicios esenciales del escritorio que afectan a TODOS los temas.
+
+		# Selector de teclado (kxkb): se muestra siempre (ShowSingle=true), con "layout" latinoamericano por defecto.
+		# Si no utilizás este tipo de teclado, cambiá "latam" en "layout_teclado", por "es", "br", "us", etcétera.
+
+		cat > "$destino/kxkbrc" <<-KXKB
+			[Layout]
+			Layout=$layout_teclado
+			Model=pc105
+			ShowSingle=true
+			Use=true
+		KXKB
+
+		# Autostart de kxkb para este usuario.
+		mkdir -p "$home/.trinity/Autostart"
+
+		cat > "$home/.trinity/Autostart/kxkb.desktop" <<-KXKBAUTO
+			[Desktop Entry]
+			Type=Application
+			Name=Keyboard Layout
+			Exec=kxkb
+			X-DCOP-ServiceType=Unique
+		KXKBAUTO
+
+		# Submenú "Salir" con "Apagar", "Reiniciar" y "Cerrar sesión". TDE no ofrece estas opciones a usuarios no-root en su diálogo de salida:
+		# hay que agregarlas como entradas de menú que usan loginctl (elogind) directamente. El prefijo "ZZ-" las ubica al final del menú.
+		local dir_salir="$home/.trinity/share/applnk/ZZ-Salir"
+		mkdir -p "$dir_salir"
+
+		cat > "$dir_salir/.directory" <<-SALIR
+			[Desktop Entry]
+			Type=Directory
+			Name=Salir
+			Name[es]=Salir
+			Icon=system-log-out
+		SALIR
+
+		cat > "$dir_salir/apagar.desktop" <<-APAGAR
+			[Desktop Entry]
+			Type=Application
+			Name=Apagar
+			Name[es]=Apagar
+			Comment=Apagar el equipo
+			Exec=loginctl poweroff
+			Icon=system-shutdown
+		APAGAR
+
+		cat > "$dir_salir/reiniciar.desktop" <<-REINICIAR
+			[Desktop Entry]
+			Type=Application
+			Name=Reiniciar
+			Name[es]=Reiniciar
+			Comment=Reiniciar el equipo
+			Exec=loginctl reboot
+			Icon=system-reboot
+		REINICIAR
+
+		cat > "$dir_salir/cerrar-sesion.desktop" <<-CERRAR
+			[Desktop Entry]
+			Type=Application
+			Name=Cerrar sesión
+			Name[es]=Cerrar sesión
+			Comment=Cerrar la sesión actual
+			Exec=sh -c "loginctl terminate-session \$XDG_SESSION_ID"
+			Icon=system-log-out
+		CERRAR
+		
+		# Permisos correctos para todo lo de este usuario.
 		chown -R "$usuario": "$home/.trinity"
 	done < /etc/passwd
 }
