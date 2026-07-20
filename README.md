@@ -60,8 +60,8 @@ Al terminar, se hace que TDE aparezca como opción en la pantalla de "login" de 
 |---|---|
 | Almacenamiento — instalación final | ~450 MB (`/opt/trinity` + `/etc/trinity` + archivos sueltos) |
 | Almacenamiento — durante la compilación | *pendiente de medición* |
-| Tiempo — AMD Ryzen 7 5800XT / 32 GB RAM | 10 minutos o menos |
-| Tiempo — hardware modesto | Mayor; puede hacerse larga la espera |
+| Tiempo — AMD Ryzen 7 5800XT / 32 GB RAM | 10 minutos |
+| Tiempo — hardware modesto | entre 50 y 60 minutos |
 | RAM mínima recomendada | *pendiente de medición* |
 | Versión de TDE | La última estable, detectada automáticamente |
 
