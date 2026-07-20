@@ -42,7 +42,7 @@ HideAnimation=true
 HideAnimationSpeed=40
 IExist=true
 KMenuHeight=533
-KMenuWidth=469
+KMenuWidth=479
 LegacyKMenu=false
 OpenOnHover=true
 Position=3
@@ -86,9 +86,7 @@ EnableTileBackground=true
 
 [menus]
 Extensions=systemmenu.desktop,prefmenu.desktop
-Favorites=tde-konqbrowser.desktop,tde-Home.desktop,tde-Kontact.desktop,tde-kate.desktop,tde-amarok.desktop,tde-digikam.desktop,tde-konsole.desktop,tde-KControl.desktop,tde-Help.desktop
-FirstSeenApps=tde-konquerorsu,-,tde-konsolesu,-,xfce4-taskmanager,-,thunar,-,grub-customizer,-,tde-kdcop,-,tde-konsole,-,octoxbps-notifier,-,gparted,-,octoxbps,-,xfce4-terminal,-,tde-ksysguard,-,cups,-,virtualbox,-,libreoffice-math,-,org.kde.gwenview,-,org.kde.okular,-,org.kde.kolourpaint,-,tde-tdefontview,-,gimp,-,org.inkscape.Inkscape,-,libreoffice-draw,-,xsane,-,tde-konqbrowser,-,tde-knetattach,-,thunderbird,-,firefox,-,chromium,-,org.telegram._ea803a246278476ac73b850477524cf0,-,org.kde.kdenlive,-,vlc,-,com.obsproject.Studio,-,simplescreenrecorder,-,org.pulseaudio.pavucontrol,-,org.gnome.Cheese,-,mpv,-,audacity,-,guvcview,-,libreoffice-base,-,libreoffice-startcenter,-,libreoffice-impress,-,libreoffice-calc,-,libreoffice-writer,-,nm-connection-editor,-,thunar-volman-settings,-,tde-kappfinder,-,tde-kmenuedit,-,tde-printers,-,thunar-settings,-,tde-kpersonalizer,-,tde-kcmkicker,-,tde-KControl,-,tde-ktip,-,tde-klipper,-,tde-kpager,-,tde-kate,-,tde-kwrite,-,org.xfce.mousepad,-,tde-kjobviewer,-,tde-tdeprintfax,-,xfce4-appfinder,-,xfce4-screenshooter,-,thunar-bulk-rename,-,tde-showdesktop,-,xarchiver,-,tde-Kfind,-,tde-Help,-,tde-Home,-
+Favorites=tde-konqbrowser.desktop,tde-Home.desktop,tde-Kontact.desktop,tde-kate.desktop,tde-amarok.desktop,tde-digikam.desktop,tde-KControl.desktop,tde-Help.desktop,xfce4-terminal.desktop
 MenuEntryFormat=NameOnly
-RecentAppsStat=6 1784127722 /usr/share/applications/xfce4-terminal.desktop,5 1784129155 /usr/share/applications/firefox.desktop,2 1784139630 /opt/trinity/share/applications/tde/konsole.desktop,1 1784125808 /opt/trinity/share/applications/tde/Kfind.desktop,1 1784125815 /opt/trinity/share/applications/tde/Home.desktop
 UseBookmarks=false
 UseBrowser=false
