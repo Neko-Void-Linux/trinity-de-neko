@@ -2,5 +2,14 @@
 Initial_TZ=0
 RemoteZones=
 
+[HiddenTrayIcons]
+Hidden=
+
+[SortedTrayIcons]
+SortOrder=!Kxkb
+
 [System Tray]
+IconMargin=1
+IconSpacing=1
+ShowClockInTray=false
 systrayIconWidth=22

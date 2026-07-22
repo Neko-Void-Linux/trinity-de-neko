@@ -6,23 +6,98 @@ Name_1=
 Name_2=
 Name_3=
 Name_4=
-Number=4
+Number=1
+
+[KDEDefault]
+ShowGrabBar=true
+ShowTitleBarStipple=true
+UseGradients=true
 
 [MouseBindings]
+CommandActiveTitlebar1=Raise
 CommandActiveTitlebar2=Lower
 CommandActiveTitlebar3=Operations menu
+CommandAll1=Move
+CommandAll2=Toggle raise and lower
+CommandAll3=Resize
+CommandAllKey=Alt
+CommandAllReverseWheel=false
+CommandAllWheel=Nothing
+CommandInactiveTitlebar1=Activate and raise
+CommandInactiveTitlebar2=Activate and lower
+CommandInactiveTitlebar3=Operations menu
+CommandTitlebarReverseWheel=false
+CommandTitlebarWheel=Nothing
+CommandWindow1=Activate, raise and pass click
+CommandWindow2=Activate and pass click
+CommandWindow3=Activate and pass click
+
+[PopupInfo]
+ShowPopup=false
 
 [Style]
-PluginLib=twin_default
+BorderSize=1
+ButtonsOnLeft=MS
+ButtonsOnRight=HIAX
+CustomButtonPositions=false
+InactiveShadowColour=102,102,102
+InactiveShadowEnabled=true
+InactiveShadowOpacity=0.7
+InactiveShadowThickness=5
+InactiveShadowXOffset=0
+InactiveShadowYOffset=5
+PluginLib=twin3_keramik
+ShadowColour=173,173,173
+ShadowDocks=true
+ShadowEnabled=true
+ShadowOpacity=0.7
+ShadowOverrides=false
+ShadowThickness=10
+ShadowTopMenus=true
+ShadowXOffset=3
+ShadowYOffset=8
+ShowToolTips=true
+
+[TabBox]
+TraverseAll=false
+
+[ThirdPartyWM]
+WMAdditionalArguments=
+WMExecutable=twin
 
 [Windows]
+ActiveBorderDelay=150
+ActiveBorderDistance=10
+ActiveBorders=0
+ActiveMouseScreen=true
 AltTabStyle=KDE
 AnimateMinimize=true
+AnimateMinimizeSpeed=5
 AnimateShade=true
-FocusPolicy=ClickToFocus
+AutoRaise=on
+AutoRaiseInterval=750
+BorderSnapZone=10
+ClickRaise=on
+DelayFocus=off
+DelayFocusInterval=750
+FocusPolicy=FocusFollowsMouse
+FocusStealingPreventionLevel=1
+GeometryTip=false
+HideUtilityWindowsForInactive=true
 IgnoreFocusStealingClasses=tdeio_uiserver
+MaximizeButtonLeftClickCommand=Maximize
+MaximizeButtonMiddleClickCommand=Maximize (vertical only)
+MaximizeButtonRightClickCommand=Maximize (horizontal only)
 MoveMode=Opaque
 MoveResizeMaximizedWindows=true
+Placement=Smart
+ResetMaximizedWindowGeometry=false
 ResizeMode=Opaque
-ShadeHover=true
+RollOverDesktops=true
+SeparateScreenFocus=false
+ShadeHover=on
+ShadeHoverInterval=250
+SnapOnlyWhenOverlapping=false
+TilingMode=Opaque
 TitlebarDoubleClickCommand=Shade
+WindowSnapZone=10
