@@ -1,6 +1,3 @@
-[$Version]
-update_info=kded.upd:trinity.0,klippershortcuts.upd:04112002,tdeaccel.upd:trinity.3/r1,mouse_cursor_theme.upd:trinity.4.99,twin.upd:trinity.2Xinerama,socks.upd:trinity.0/r1
-
 [DesktopIcons]
 ActiveColor=invalid
 ActiveColor2=invalid
@@ -22,132 +19,45 @@ DoublePixels=false
 Size=48
 
 [General]
-background=174,178,195
-buttonBackground=174,178,195
-buttonForeground=0,0,0
-foreground=0,0,0
-linkColor=0,0,255
-selectBackground=113,139,165
+BrowserApplication[$e]=firefox.desktop
+TerminalApplication[$e]=xfce4-terminal
+XftHintStyle=hintfull
+alternateBackground=146,146,146
+background=153,153,153
+buttonBackground=153,153,153
+buttonForeground=255,255,255
+foreground=255,255,255
+linkColor=255,255,192
+selectBackground=50,98,132
 selectForeground=255,255,255
-visitedLinkColor=192,255,255
-widgetStyle=Motif
-windowBackground=147,151,165
-windowForeground=0,0,0
-
-[Global Shortcuts]
-Desktop Screenshot=default(Ctrl+Print)
-Enable/Disable Clipboard Actions=default(Alt+Ctrl+X)
-Halt Computer=none
-Halt without Confirmation=none
-Kill Window=default(Alt+Ctrl+Escape)
-Lock Session=default(Alt+Ctrl+L)
-Lock Session (Hotkey)=default(XF86ScreenSaver)
-Log Out=default(Alt+Ctrl+Delete)
-Log Out Without Confirmation=none
-Manually Invoke Action on Current Clipboard=default(Alt+Ctrl+R)
-Mouse Emulation=default(Alt+F12)
-Popup Launch Menu=default(Alt+F1)
-Reboot Computer=none
-Reboot without Confirmation=none
-Run Command=default(Alt+F2)
-Show Klipper Popup-Menu=default(Alt+Ctrl+V)
-Show Taskmanager=default(Ctrl+Escape)
-Show Window List=default(Alt+F5)
-Start Screen Saver=default(Alt+Ctrl+S)
-Suspend=default(XF86Sleep)
-Switch One Desktop Down=none
-Switch One Desktop Up=none
-Switch One Desktop to the Left=none
-Switch One Desktop to the Right=none
-Switch to Desktop 1=default(Ctrl+F1)
-Switch to Desktop 10=default(Ctrl+F10)
-Switch to Desktop 11=default(Ctrl+F11)
-Switch to Desktop 12=default(Ctrl+F12)
-Switch to Desktop 13=default(Ctrl+Shift+F1)
-Switch to Desktop 14=default(Ctrl+Shift+F2)
-Switch to Desktop 15=default(Ctrl+Shift+F3)
-Switch to Desktop 16=default(Ctrl+Shift+F4)
-Switch to Desktop 2=default(Ctrl+F2)
-Switch to Desktop 3=default(Ctrl+F3)
-Switch to Desktop 4=default(Ctrl+F4)
-Switch to Desktop 5=default(Ctrl+F5)
-Switch to Desktop 6=default(Ctrl+F6)
-Switch to Desktop 7=default(Ctrl+F7)
-Switch to Desktop 8=default(Ctrl+F8)
-Switch to Desktop 9=default(Ctrl+F9)
-Switch to Next Desktop=none
-Switch to Next Keyboard Layout=default(Alt+Ctrl+K)
-Switch to Previous Desktop=none
-Toggle Showing Desktop=default(Alt+Ctrl+D)
-Toggle Window Raise/Lower=none
-Walk Through Desktop List=default(Ctrl+Tab)
-Walk Through Desktop List (Reverse)=default(Ctrl+Shift+Tab)
-Walk Through Desktops=none
-Walk Through Desktops (Reverse)=none
-Walk Through Windows=default(Alt+Tab)
-Walk Through Windows (Reverse)=default(Alt+Shift+Tab)
-Window Close=default(Alt+F4)
-Window Iconify=none
-Window Lower=none
-Window Maximize=none
-Window Maximize Horizontal=none
-Window Maximize Vertical=none
-Window Move=none
-Window Operations Menu=default(Alt+F3)
-Window Raise=none
-Window Resize=none
-Window Screenshot=default(Alt+Print)
-Window Shade=none
-Window to Desktop 1=none
-Window to Desktop 10=none
-Window to Desktop 11=none
-Window to Desktop 12=none
-Window to Desktop 13=none
-Window to Desktop 14=none
-Window to Desktop 15=none
-Window to Desktop 16=none
-Window to Desktop 2=none
-Window to Desktop 3=none
-Window to Desktop 4=none
-Window to Desktop 5=none
-Window to Desktop 6=none
-Window to Desktop 7=none
-Window to Desktop 8=none
-Window to Desktop 9=none
-Window to Next Desktop=none
-Window to Previous Desktop=none
+shadeSortColumn=true
+visitedLinkColor=192,255,192
+widgetStyle=plastik
+windowBackground=129,129,129
+windowForeground=255,255,255
 
 [Icons]
-Theme=crystalsvg
+Theme=breeze
 
 [KDE]
 ChangeCursor=true
 EffectAnimateCombo=true
+EffectAnimateMenu=false
+EffectAnimateTooltip=false
 EffectFadeMenu=true
 EffectFadeTooltip=true
+EffectNoTooltip=false
 EffectsEnabled=true
 IconUseRoundedRect=true
+InsertTearOffHandle=0
 OpaqueResize=true
 ShowIconsOnPushButtons=true
 ShowKonqIconActivationEffect=true
 SingleClick=false
-colorScheme=/opt/trinity/share/apps/tdedisplay/color-schemes/SolarisCDE.kcsrc
+SmoothScrolling=true
+colorScheme=CDE.kcsrc
 contrast=7
 macStyle=false
-
-[KKeyDialog Settings]
-Dialog Size=1913,432
-
-[Keyboard]
-Gestures=false
-
-[License Info]
-R14.1=true
-
-[Locale]
-Country=uy
-DateFormat=%A %d %B %Y
-Language=es
 
 [MainToolbarIcons]
 ActiveColor=169,156,255
@@ -189,19 +99,6 @@ DisabledValue=1
 DoublePixels=false
 Size=32
 
-[Paths]
-Trash[$e]=$HOME/Escritorio/Trash/
-
-[R14 XDG Updates]
-Updated=true
-Version=202202130
-
-[RecentDocuments]
-MaxEntries=10
-
-[Release Notes]
-R14.1.6=true
-
 [SmallIcons]
 ActiveColor=169,156,255
 ActiveColor2=0,0,0
@@ -221,6 +118,11 @@ DisabledSemiTransparent=true
 DisabledValue=1
 DoublePixels=false
 Size=16
+
+[Toolbar style]
+Highlighting=true
+IconText=IconOnly
+TransparentMoving=true
 
 [ToolbarIcons]
 ActiveColor=169,156,255
@@ -243,12 +145,16 @@ DoublePixels=false
 Size=22
 
 [WM]
-activeBackground=178,77,122
-activeBlend=174,178,195
+activeBackground=50,98,132
+activeBlend=153,153,153
 activeForeground=255,255,255
-activeTitleBtnBg=174,178,195
+activeTitleBtnBg=220,220,220
 alternateBackground=237,244,249
-inactiveBackground=174,178,195
-inactiveBlend=174,178,195
-inactiveForeground=0,0,0
-inactiveTitleBtnBg=174,178,195
+frame=153,153,153
+handle=153,153,153
+inactiveBackground=129,129,129
+inactiveBlend=153,153,153
+inactiveForeground=255,255,255
+inactiveFrame=153,153,153
+inactiveHandle=153,153,153
+inactiveTitleBtnBg=220,220,220

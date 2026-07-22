@@ -1,35 +1,36 @@
-# created by TDE, mié jul 15 15:17:58 2026
+# creado por TDE, mar jul 21 23:04:33 2026
 #
-# If you do not want TDE to override your GTK settings, select
-# Appearance & Themes -> Colors in the Control Center and disable the checkbox
-# "Apply colors to non-TDE applications"
+# Si no desea que TDE sobrescriba sus preferencias GTK, seleccione
+# Aspecto y temas -> Colores en el centro de control y desactive
+#la casilla de selección
+# "Aplicar colores a aplicaciones no TDE"
 #
 #
 style "default"
 {
-  bg[NORMAL] = { 0.682, 0.698, 0.765 }
-  bg[SELECTED] = { 0.443, 0.545, 0.647 }
-  bg[INSENSITIVE] = { 0.682, 0.698, 0.765 }
-  bg[ACTIVE] = { 0.569, 0.580, 0.635 }
-  bg[PRELIGHT] = { 0.682, 0.698, 0.765 }
+  bg[NORMAL] = { 0.600, 0.600, 0.600 }
+  bg[SELECTED] = { 0.196, 0.384, 0.518 }
+  bg[INSENSITIVE] = { 0.600, 0.600, 0.600 }
+  bg[ACTIVE] = { 0.498, 0.498, 0.498 }
+  bg[PRELIGHT] = { 0.600, 0.600, 0.600 }
 
-  base[NORMAL] = { 0.576, 0.592, 0.647 }
-  base[SELECTED] = { 0.443, 0.545, 0.647 }
-  base[INSENSITIVE] = { 0.682, 0.698, 0.765 }
-  base[ACTIVE] = { 0.443, 0.545, 0.647 }
-  base[PRELIGHT] = { 0.443, 0.545, 0.647 }
+  base[NORMAL] = { 0.506, 0.506, 0.506 }
+  base[SELECTED] = { 0.196, 0.384, 0.518 }
+  base[INSENSITIVE] = { 0.600, 0.600, 0.600 }
+  base[ACTIVE] = { 0.196, 0.384, 0.518 }
+  base[PRELIGHT] = { 0.196, 0.384, 0.518 }
 
-  text[NORMAL] = { 0.000, 0.000, 0.000 }
+  text[NORMAL] = { 1.000, 1.000, 1.000 }
   text[SELECTED] = { 1.000, 1.000, 1.000 }
-  text[INSENSITIVE] = { 0.569, 0.580, 0.635 }
+  text[INSENSITIVE] = { 0.498, 0.498, 0.498 }
   text[ACTIVE] = { 1.000, 1.000, 1.000 }
   text[PRELIGHT] = { 1.000, 1.000, 1.000 }
 
-  fg[NORMAL] = { 0.000, 0.000, 0.000 }
+  fg[NORMAL] = { 1.000, 1.000, 1.000 }
   fg[SELECTED] = { 1.000, 1.000, 1.000 }
-  fg[INSENSITIVE] = { 0.569, 0.580, 0.635 }
-  fg[ACTIVE] = { 0.000, 0.000, 0.000 }
-  fg[PRELIGHT] = { 0.000, 0.000, 0.000 }
+  fg[INSENSITIVE] = { 0.498, 0.498, 0.498 }
+  fg[ACTIVE] = { 1.000, 1.000, 1.000 }
+  fg[PRELIGHT] = { 1.000, 1.000, 1.000 }
 }
 
 class "*" style "default"
@@ -49,7 +50,7 @@ widget "gtk-tooltips" style "ToolTip"
 
 style "MenuItem"
 {
-  bg[PRELIGHT] = { 0.443, 0.545, 0.647 }
+  bg[PRELIGHT] = { 0.196, 0.384, 0.518 }
   fg[PRELIGHT] = { 1.000, 1.000, 1.000 }
 }
 
