@@ -57,7 +57,7 @@ Al terminar, se hace que TDE aparezca como opción en la pantalla de "login" de 
 |---|---|
 | Almacenamiento — instalación final | ~500 MB que quedan en `/opt/trinity` y `/etc/trinity` |
 | Almacenamiento — durante la compilación | 1.8 GB de descarga (temporal, con limpieza al finalizar) en `/var/tmp/trinity-build` |
-| Tiempo — AMD Ryzen 7 5800XT / 32 GB RAM | 10 minutos |
+| Tiempo — AMD Ryzen 7 5800XT / 32 GB RAM | 15 minutos |
 | Tiempo — hardware modesto | Entre 50 y 60 minutos |
 | RAM mínima recomendada | *Pendiente de medición, pero se sugiere un mínimo de 8 GB (hay que compilar bastante)* |
 | Versión de TDE | La última estable, detectada automáticamente |
@@ -140,6 +140,10 @@ El aporte propio de este repositorio es, básicamente, **la traducción de todo 
 - `tdebase` se compila completo (`-DBUILD_ALL=ON`), así que trae Konqueror y Konsole aunque no los quieras, porque me di cuenta de que son parte importante del entorno en sí, así como de su ecosistema.
 - La variable `libdir` del script apunta a `/opt/trinity/lib`, que no existe hasta que se crea el symlink al final. Funciona, pero es deuda técnica.
 - `-DLIB_SUFFIX=""` creo que no tiene efecto: CMake lo ignora y usa `lib64` igualmente.
+
+## Documentación sólida sobre este proyecto y pormenores acerca del mismo
+
+[Trinity en Void Linux: un pedido que llevaba 6 años sin respuesta y que pudo resolver Entropía binaria.](https://entropiabinaria.blogspot.com/2026/07/trinity-en-void-linux-un-pedido-que.html)
 
 ## Licencia
 
