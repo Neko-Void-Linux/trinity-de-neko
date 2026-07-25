@@ -2,7 +2,7 @@
 
 # Compilador e instalador de Trinity Desktop Environment (TDE) en Void Linux desde las fuentes oficiales (/opt/trinity).
 
-VERSION="0.103.108"
+VERSION="0.109.150"
 
 # Idioma de la interfaz. Se compila solo el subdirectorio de este idioma (poco más de 100 MB) desde el repo tde-i18n (que pesaría más de 3 GB completo).
 idioma="es"
@@ -11,6 +11,9 @@ idioma="es"
 layout_teclado="latam"
 
 set -euo pipefail
+
+# Directorio temporal para compilación.
+vartemp="/var/tmp/trinity-build"
 
 reset=$'\e[0m'
 negro=$'\e[1m'
@@ -23,7 +26,7 @@ beige=$'\e[38;5;223m'
 
 ctrlc(){
     tput cvvis
-    echo -e "\n    ${dorado}Se ha salido limpiamente sin haberse hecho ningún cambio en el sistema.\n${reset}"
+    echo -e "\n    ${dorado}Se interrumpió el funcionamiento del programa debido a la cancelación externa.\n${reset}"
     exit 0
 }
 
@@ -37,23 +40,26 @@ cartel() {
 
 trap ctrlc SIGINT
 
+# Auto-elevación: si el script no es ejecutado como root, el mismo es re-lanzado. Si hay root directo, se continúa. sudo eleva.
+if [[ $EUID -ne 0 ]];then
+	if command -v sudo >/dev/null 2>&1;then
+		clear
+		echo -e "\n${rojo}(!) 'TDEntropía' (instalador del escritorio Trinity -TDE-) necesita privilegios de root."
+		echo -en "${dorado}Ingresa la "
+		exec sudo bash "$0" "$@"
+	else
+		echo -e "\n${rojo}(!) Este script necesita privilegios de root. No se encontró 'sudo'." >&2
+		echo -e "Ejecutalo como root o instalá 'sudo'.${reset}" >&2
+		exit 1
+	fi
+fi
+
 clear
 cartel
 echo -e "    Pulsá alguna tecla para comenzar con la instalación, o [Ctrl] [C] para salir.\n"
 tput civis
 read -rsn1
 tput cvvis
-
-# Auto-elevación: si el script no es ejecutado como root, el mismo es re-lanzado. Si hay root directo, se continúa. sudo eleva.
-if [[ $EUID -ne 0 ]];then
-	if command -v sudo >/dev/null 2>&1;then
-		exec sudo bash "$0" "$@"
-	else
-		echo -e "${rojo}(!) Este script necesita privilegios de root. No se encontró 'sudo'." >&2
-		echo -e "Ejecutalo como root o instalá 'sudo'.${reset}" >&2
-		exit 1
-	fi
-fi
 
 hora_inicio=$(date +%T)
 echo -e "${dorado}Hora de inicio: $hora_inicio${reset}"
@@ -80,6 +86,10 @@ trabajo="/var/tmp/trinity-build"
 gitea_api="https://mirror.git.trinitydesktop.org/gitea/api/v1/repos/TDE"
 gitea_archivo="https://mirror.git.trinitydesktop.org/gitea/TDE"
 
+# Los .gitmodules de TDE apuntan los submódulos (admin, libltdl, etc.) a scm.trinitydesktop.org, servidor frágil que suele caerse. Esta redirección
+# hace que git los descargue del mismo mirror que el resto de las fuentes. Se aplica por-comando (con git -c), sin tocar la config global del usuario.
+redir_submodulos='url.https://mirror.git.trinitydesktop.org/gitea/TDE/.insteadOf=https://system@scm.trinitydesktop.org/scm/git/'
+
 # Versión: se detecta en tiempo de ejecución consultando los tags de tdebase. Se completa en la función correspondiente (vacía, por ahora).
 version=""
 
@@ -96,9 +106,13 @@ libs_devel=(libX11-devel libXext-devel libXrender-devel libXrandr-devel \
 	libXinerama-devel dbus-devel libltdl-devel file-devel libXcomposite-devel libxml2-devel libxslt-devel glib-devel alsa-lib-devel \
 	openssl-devel cups-devel libudev-devel libXt-devel libtirpc-devel libxkbfile-devel bzip2-devel liblzma-devel pcre2-devel acl-devel attr-devel)
 	
+# Paquetes de runtime (no de build): apps que el usuario necesita para usar TDE en el día a día. Se instalan por separado de las dependencias de compilación.
+# network-manager-applet en panel (eth0 y wlan0). TDE no trae uno propio funcional: se utiliza este (hubo una época en la cual Gnome hacía bien las cosas).
+runtime_pkgs=(network-manager-applet)
+
 # Consultar los tags de tdebase en la API de gitea y obtener la última versión. Los tags vienen ordenados del más nuevo al más viejo.
 detectar_version() {
-	echo ">> detectando última versión de TDE..."
+	echo -e "${dorado}\n> Detectando última versión de TDE...${reset}\n"
 
 	version=$(curl -s --retry 3 --retry-delay 2 --max-time 30 "$gitea_api/tdebase/tags?limit=1" \
 		| grep -o '"name":"[^"]*"' \
@@ -107,11 +121,11 @@ detectar_version() {
 
 	if [[ -z "$version" ]];then
 		echo "ERROR: no se pudo detectar la versión desde la API de gitea." >&2
-		echo "verificá tu conexión o el estado de $gitea_api" >&2
+		echo "Verificá tu conexión o el estado de $gitea_api" >&2
 		exit 1
 	fi
 
-	echo ">> última versión detectada: $version"
+	echo -e "${dorado}> Última versión detectada: $version${reset}"
 }
 
 # Clonar un módulo desde gitea por su tag de versión. Recibe el nombre del módulo como argumento y utiliza la versión global
@@ -125,9 +139,9 @@ descargar_modulo() {
     # El directorio de trabajo puede existir de una ejecución interrumpida anterior (git no clona por encima).
 	rm -rf "$destino"
 	
-	echo ">> clonando $modulo ($version)..."
+	echo -e "\n${dorado} > Clonando $modulo ($version)...${reset}\n"
 
-    git clone --quiet --recurse-submodules --branch "$version" --depth 1 "$url" "$destino"
+    git -c "$redir_submodulos" clone --quiet --recurse-submodules --branch "$version" --depth 1 "$url" "$destino"
     
 	if [[ ! -d "$destino" ]];then
 		echo "ERROR: falló el clonado de $modulo desde $url" >&2
@@ -140,7 +154,7 @@ descargar_modulo() {
 # instala en $tqtdir (/opt/trinity/tqt3).
 
 compilar_tqt() {
-	echo ">> compilando tqt..."
+	echo -e "\n${dorado}> Compilando tqt...${reset}\n"
 	cd "$trabajo/tqt"
 
 	# tqt exporta su propio directorio como TQTDIR durante el build.
@@ -197,7 +211,7 @@ compilar_cmake() {
 	local modulo="$1"
 	local prefijo_mod="$2"
 
-	echo ">> compilando $modulo (cmake, prefijo $prefijo_mod)..."
+	echo -e "\n${dorado}> Compilando $modulo (cmake, prefijo $prefijo_mod)...${reset}\n"
 
 	# build out-of-source: se compila en un sub dirirectorio para no ensuciar el árbol de fuentes.
 	local dir_build="$trabajo/$modulo/build"
@@ -247,14 +261,40 @@ compilar_cmake() {
 	fi
 }
 
+# compilar_cmake_kmix: variante de compilar_cmake para módulos de los que solo se quiere UN subdirectorio (compilación selectiva).
+# tdemultimedia trae a "kmix" junto a un montón de elementos que no se están incluyendo (noatun, juk, kscd, aRts...): con BUILD_ALL=OFF y BUILD_KMIX=ON
+# se compila SOLO el mezclador. Se mantiene aparte de compilar_cmake mientras la "capa base de bandeja" sea experimental.
+compilar_cmake_kmix() {
+	echo -e "\n${dorado} Compilando kmix (tdemultimedia, selectivo)...${reset}\n"
+	local dir_build="$trabajo/tdemultimedia/build"
+
+	mkdir -p "$dir_build"
+	rm -rf "$dir_build"/*
+	cd "$dir_build"
+
+	cmake "$trabajo/tdemultimedia" \
+		-DCMAKE_INSTALL_PREFIX="$prefijo" \
+		-DSYSCONF_INSTALL_DIR="$sysconfdir" \
+		-DLIB_SUFFIX="" \
+		-DMAN_INSTALL_DIR="$mandir" \
+		-DBUILD_ALL=OFF \
+		-DBUILD_KMIX=ON
+	make
+
+	make install
+
+	if [[ -f "$dir_build/install_manifest.txt" ]];then
+		mkdir -p "$prefijo/.registro"
+		cp "$dir_build/install_manifest.txt" "$prefijo/.registro/tdemultimedia.txt"
+	fi
+}
+
 # tde-i18n es un repo de más de 3 GB que contiene a todos los idiomas, uno por subdirectorio. Se usa "sparse checkout" para bajar solo el
 # necesario, y se compila ese subdirectorio (así lo hace la gente que sabe, es decir, la gente de FreeBSD).
 compilar_idioma() {
-	echo ">> Compilando traducciones ($idioma)..."
-
+	echo -e "\n${dorado}> Compilando traducciones ($idioma)...${reset}\n"
 	local destino="$trabajo/tde-i18n"
 	local fuente="$destino/tde-i18n-$idioma"
-
 	rm -rf "$destino"
 
 	git clone --quiet --depth 1 --branch "$version" --filter=blob:none --sparse "$gitea_archivo/tde-i18n.git" "$destino"
@@ -279,14 +319,17 @@ compilar_idioma() {
 # Instalar con xbps todo lo necesario para compilar TDE. Se declaran todas las dependencias con agnosticismo respecto a lo que haya
 # (o esté configurado) en mi sistema, que es el que se está utilizando como base para pruebas.
 instalar_dependencias() {
-	echo ">> instalando dependencias de build..."
+	echo -e "\n${dorado}> Instalando dependencias de estructurales (builds)...${reset}\n"
 	xbps-install -Sy "${toolchain[@]}" "${libs_devel[@]}"
+
+	echo -e "\n${dorado}> Instalando paquetes para 'tiempo de ejecución' (runtimes)...${reset}\n"
+	xbps-install -Sy "${runtime_pkgs[@]}"
 }
 
 # A continuación, se deja el sistema listo para usar TDE. registra las librerías de /opt/trinity en el "linker" dinámico
 # y agrega un perfil que exporta PATH, TQTDIR y demás para todos los usuarios.
 configurar_entorno() {
-	echo ">> configurando entorno del sistema..."
+	echo -e "\n${dorado}> Configurando entorno del sistema...${reset}\n"
 
 	# cmake instala lib64 en x86_64, pero TDE busca sus plugins en lib/trinity. Sin este "symlink", twin no encuentra las decoraciones y los widgets quedan sin estilo.
 	if [[ ! -e "$prefijo/lib" ]];then
@@ -319,7 +362,7 @@ configurar_entorno() {
 # Colocar al archivo .desktop en /usr/share/xsessions para que TDE aparezca como opción en la pantalla de login. Es un estándar
 # "free"desktop: lo leen todos los gestores (lightdm, sddm, gdm, lxdm...), así que no hace falta detectar cuál usa el sistema.
 integrar_sesion() {
-	echo ">> integrando TDE a la pantalla de login..."
+	echo -e "\n${dorado}> Integrando a TDE a la pantalla de inicio (login)...${reset}\n"
 	mkdir -p /usr/share/xsessions
 
     cat > /usr/share/xsessions/tde.desktop <<-EOF
@@ -338,8 +381,7 @@ integrar_sesion() {
 # El make install de tdelibs no instala tde-applications.menu (Debian lo copia a mano en su packaging). Sin este archivo, el menú de aplicaciones de TDE
 # aparece vacío (tdebuildsycoca lo busca en /etc/xdg/menus, ignorando XDG_CONFIG_DIRS).
 instalar_menu() {
-	echo ">> Instalando el menú de aplicaciones..."
-
+	echo -e "\n${dorado}> Instalando el menú de aplicaciones...${reset}\n"
 	local origen="$trabajo/tdelibs/kded/tde-applications.menu"
 
 	if [[ ! -f "$origen" ]];then
@@ -355,8 +397,7 @@ instalar_menu() {
 # Aplicar la configuración de escritorio de Entropía binaria a todos los usuarios humanos del sistema (UID >= 1000). Los archivos
 # viven en entropia_conf/, junto al script. Cada usuario recibe la config con sus propios permisos, no con los de root.
 aplicar_configuracion() {
-	echo ">> Aplicando configuración de escritorio..."
-
+	echo -e "\n${dorado}> Aplicando configuración de escritorio...${reset}\n"
 	local origen="$(dirname "$(readlink -f "$0")")/entropia_conf"
 
 	if [[ ! -d "$origen" ]];then
@@ -374,10 +415,8 @@ aplicar_configuracion() {
 			continue
 		fi
 
-		echo ">> Configurando escritorio para $usuario ($home)..."
-
+		echo -e "\n${dorado}> Configurando escritorio para $usuario ($home)...${reset}\n"
 		local destino="$home/.trinity/share/config"
-
 		mkdir -p "$destino"
 		cp -r "$origen"/* "$destino/"
 		
@@ -405,6 +444,24 @@ aplicar_configuracion() {
 			X-DCOP-ServiceType=Unique
 		KXKBAUTO
 
+		# Autostart de kmix (mezclador de volumen): aparece como icono en la bandeja desde el primer inicio de sesión.
+		cat > "$home/.trinity/Autostart/kmix.desktop" <<-KMIXAUTO
+			[Desktop Entry]
+			Type=Application
+			Name=Sound Mixer
+			Exec=kmix
+			X-DCOP-ServiceType=Unique
+		KMIXAUTO
+		
+		# Autostart de nm-applet (eth0, wlan0) para este usuario. SIN X-DCOP-ServiceType: nm-applet no habla DCOP, y declararlo como servicio DCOP,
+		# daña el cierre de sesión de TDE (queda esperando una notificación que nm-applet nunca responde).
+		cat > "$home/.trinity/Autostart/nm-applet.desktop" <<-NMAPPLETAUTO
+			[Desktop Entry]
+			Type=Application
+			Name=Network
+			Exec=nm-applet
+		NMAPPLETAUTO
+		
 		# Submenú "Salir" con "Apagar", "Reiniciar" y "Cerrar sesión". TDE no ofrece estas opciones a usuarios no-root en su diálogo de salida:
 		# hay que agregarlas como entradas de menú que usan loginctl (elogind) directamente. El prefijo "ZZ-" las ubica al final del menú.
 		local dir_salir="$home/.trinity/share/applnk/ZZ-Salir"
@@ -444,7 +501,7 @@ aplicar_configuracion() {
 			Name=Cerrar sesión
 			Name[es]=Cerrar sesión
 			Comment=Cerrar la sesión actual
-			Exec=sh -c "loginctl terminate-session \$XDG_SESSION_ID"
+			Exec=sh -c "loginctl terminate-session \$(loginctl show-session self -p Id --value)"
 			Icon=system-log-out
 		CERRAR
 		
@@ -455,15 +512,27 @@ aplicar_configuracion() {
 
 # Borrar el directorio temporal de trabajo con las fuentes.
 limpiar() {
-	echo ">> limpiando fuentes temporales..."
+	echo -e "\n${dorado}> Limpiando fuentes temporales...${reset}\n"
 
-	# Borrado "hardcodeado" a propósito: NO se utiliza "$trabajo" acá (es la única excepción al uso de la variable en todo el script).
-	# Esto es para que, si la variable quedara vacía o mal definida, este rm -rf jamás pueda "cargarse" a otro(s) directorio(s).
-	# Si a futuro se altera "trabajo" arriba, hay que cambiar también este "path" a mano.
-	rm -rf /var/tmp/trinity-build
+	# Se usa "$vartemp" (declarada arriba del todo). Guarda de seguridad: si por un error quedara vacía o sin definir, se aborta
+	# antes del rm -rf para que este jamás pueda "cargarse" a otro(s) directorio(s). Si a futuro se altera "vartemp", se altera en un solo lugar.
+	if [[ -z "$vartemp" ]];then
+		echo "> ERROR: la variable 'vartemp' está vacía, y por lo tanto no se sabe qué borrar. No se eliminaron los archivos de compilación."
+		return 1
+	fi
+
+	if [[ ! -d "$vartemp" ]];then
+		echo "El directorio '$vartemp' no existe. Nada que limpiar."
+		return 0
+	fi
+
+	echo "Peso a liberar: $(du -sh "$vartemp" 2>/dev/null | cut -f1)"
+	rm -rf "$vartemp"
 }
 
-echo "**** Instalador de 'Trinity Desktop Environment' para Void Linux ****"
+tput blink
+echo -e "\n${dorado}**** Instalador de 'Trinity Desktop Environment' para Void Linux ****${reset}\n"
+tput sgr0
 
 instalar_dependencias
 detectar_version
@@ -488,6 +557,10 @@ compilar_cmake "dbus-1-tqt" "$prefijo"
 compilar_cmake "tdelibs" "$prefijo"
 compilar_cmake "tdebase" "$prefijo"
 
+# Capa base de bandeja (experimental): kmix (mezclador de volumen). Depende de tdelibs + tdebase ya instalados.
+descargar_modulo "tdemultimedia"
+compilar_cmake_kmix
+
 compilar_idioma
 instalar_menu
 configurar_entorno
@@ -496,18 +569,24 @@ aplicar_configuracion
 limpiar
 
 hora_fin=$(date +%T)
-echo -e "\n**** ¡Todo listo! ****\n"
-echo -e "${dorado}Hora de inicio      : "$hora_inicio
-echo -e "Hora de finalización: $hora_fin${reset}"
+tput blink
+echo -e "\n${dorado}**** ¡Todo listo! ****${reset}\n"
+tput sgr0
+
+echo -e "${verde}Hora de inicio      : "$hora_inicio
+echo -e "Hora de finalización: $hora_fin${reset}\n"
 sleep 1
-echo "Trinity quedó instalado en $prefijo"
-echo "Cerrá sesión y elegí 'Trinity (TDE)' en la pantalla de login."
+echo -e "${verde}Trinity quedó instalado en $prefijo"
+echo -e "Cerrá sesión y elegí 'Trinity (TDE)' en la pantalla de login.${reset}"
 sleep 1
-echo -e "${rojo}\nPara revertir todo:"
+echo -e "\n${rojo}\nPara revertir todo:"
 echo "  rm -rf $prefijo"
 echo "  rm -f /etc/ld.so.conf.d/trinity.conf && ldconfig"
 echo "  rm -f /etc/profile.d/trinity.sh"
 echo "  rm -f /usr/share/xsessions/tde.desktop"
 echo "  rm -f /etc/xdg/menus/tde-applications.menu"
-echo -e "  (para tqtinterface en /usr, ver $prefijo/.registro/tqtinterface.txt)\n${reset}"
+echo "  (para tqtinterface en /usr, ver $prefijo/.registro/tqtinterface.txt)"
+echo "  (para kmix/tdemultimedia, ver $prefijo/.registro/tdemultimedia.txt)"
+echo -e "  (nm-applet se instaló vía xbps; si no lo querés: xbps-remove network-manager-applet)${reset}\n"
 sleep 1
+echo -e "${dorado}Programa de uso libre suministrado por Entropía binaria.${reset}\n"
